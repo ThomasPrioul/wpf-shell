@@ -24,7 +24,8 @@ using System.Windows.Markup;
 [assembly: AssemblyVersion("3.0.1.0")]
 [assembly: AssemblyFileVersion("3.0.1.0")]
 
-[assembly: XmlnsDefinition("http://schemas.microsoft.com/winfx/2006/xaml/presentation/shell", "Microsoft.Windows.Shell")]
+[assembly: XmlnsDefinition("http://schemas.microsoft.com/winfx/2006/xaml/presentation/shell", "System.Windows.Shell")]
+[assembly: XmlnsDefinition("http://schemas.microsoft.com/winfx/2006/xaml/presentation", "System.Windows.Shell")]
 
 // Code analysis suppressions:
 [assembly: SuppressMessage("Microsoft.Design", "CA1020:AvoidNamespacesWithFewTypes", Scope = "namespace", Target = "Standard", Justification="Internal-only namespace")]

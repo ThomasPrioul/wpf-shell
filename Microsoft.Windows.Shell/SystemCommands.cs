@@ -1,5 +1,5 @@
 ﻿
-namespace Microsoft.Windows.Shell
+namespace System.Windows.Shell
 {
     using System;
     using System.Windows;

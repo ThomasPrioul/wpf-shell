@@ -2,7 +2,7 @@
     Copyright Microsoft Corporation. All Rights Reserved.
 \**************************************************************************/
 
-namespace Microsoft.Windows.Shell
+namespace System.Windows.Shell
 {
     using System;
     using System.Collections.Generic;
@@ -22,23 +22,16 @@ namespace Microsoft.Windows.Shell
         Bottom,
         BottomLeft,
         Left,
-        Caption,
     }
 
     [Flags]
-    public enum SacrificialEdge
+    public enum NonClientFrameEdges
     {
         None = 0,
         Left = 1,
         Top = 2,
         Right = 4,
         Bottom = 8,
-
-        Office = Left | Right | Bottom,
-
-        // Don't use "All" - Handling WM_NCCALCSIZE with a client rect shrunk in all directions implicitly creates a 
-        // normal sized caption area that doesn't actually properly participate with the rest of the implementation...
-        // All = Left | Top | Right | Bottom,
     }
 
     public class WindowChrome : Freezable
@@ -242,23 +235,6 @@ namespace Microsoft.Windows.Shell
             set { SetValue(UseAeroCaptionButtonsProperty, value); }
         }
 
-        /// <summary>Dependency property for IgnoreTaskbarOnMaximize</summary>
-        public static readonly DependencyProperty IgnoreTaskbarOnMaximizeProperty = DependencyProperty.Register(
-            "IgnoreTaskbarOnMaximize",
-            typeof(bool),
-            typeof(WindowChrome),
-            new FrameworkPropertyMetadata(false));
-
-        /// <summary>
-        /// If this property is true and the attached window's WindowStyle=None then when the window is maximized it will cover the entire
-        /// monitor, including the taskbar.
-        /// </summary>
-        public bool IgnoreTaskbarOnMaximize
-        {
-            get { return (bool)GetValue(IgnoreTaskbarOnMaximizeProperty); }
-            set { SetValue(IgnoreTaskbarOnMaximizeProperty, value); }
-        }
-
         public static readonly DependencyProperty CornerRadiusProperty = DependencyProperty.Register(
             "CornerRadius",
             typeof(CornerRadius),
@@ -274,42 +250,42 @@ namespace Microsoft.Windows.Shell
             set { SetValue(CornerRadiusProperty, value); }
         }
 
-        public static readonly DependencyProperty SacrificialEdgeProperty = DependencyProperty.Register(
-            "SacrificialEdge",
-            typeof(SacrificialEdge),
+        public static readonly DependencyProperty NonClientFrameEdgesProperty = DependencyProperty.Register(
+            "NonClientFrameEdges",
+            typeof(NonClientFrameEdges),
             typeof(WindowChrome),
             new PropertyMetadata(
-                SacrificialEdge.None,
+                NonClientFrameEdges.None,
                 (d, e) => ((WindowChrome)d)._OnPropertyChangedThatRequiresRepaint()),
-                _IsValidSacrificialEdge);
+            _NonClientFrameEdgesAreValid);
 
-        private static readonly SacrificialEdge SacrificialEdge_All = SacrificialEdge.Bottom | SacrificialEdge.Top | SacrificialEdge.Left | SacrificialEdge.Right;
+        private static readonly NonClientFrameEdges NonClientFrameEdges_All = NonClientFrameEdges.Left | NonClientFrameEdges.Top | NonClientFrameEdges.Right | NonClientFrameEdges.Bottom;
 
-        private static bool _IsValidSacrificialEdge(object value)
+        private static bool _NonClientFrameEdgesAreValid(object value)
         {
-            SacrificialEdge se = SacrificialEdge.None;
+            NonClientFrameEdges ncEdges = NonClientFrameEdges.None;
             try
             {
-                se = (SacrificialEdge)value;
+                ncEdges = (NonClientFrameEdges)value;
             }
             catch (InvalidCastException)
             {
                 return false;
             }
 
-            if (se == SacrificialEdge.None)
+            if (ncEdges == NonClientFrameEdges.None)
             {
                 return true;
             }
 
             // Does this only contain valid bits?
-            if ((se | SacrificialEdge_All) != SacrificialEdge_All)
+            if ((ncEdges | NonClientFrameEdges_All) != NonClientFrameEdges_All)
             {
                 return false;
             }
 
             // It can't sacrifice all 4 edges.  Weird things happen.
-            if (se == SacrificialEdge_All)
+            if (ncEdges == NonClientFrameEdges_All)
             {
                 return false;
             }
@@ -317,10 +293,10 @@ namespace Microsoft.Windows.Shell
             return true; 
         }
 
-        public SacrificialEdge SacrificialEdge
+        public NonClientFrameEdges NonClientFrameEdges
         {
-            get { return (SacrificialEdge)GetValue(SacrificialEdgeProperty); }
-            set { SetValue(SacrificialEdgeProperty, value); }
+            get { return (NonClientFrameEdges)GetValue(NonClientFrameEdgesProperty); }
+            set { SetValue(NonClientFrameEdgesProperty, value); }
         }
 
         #endregion
@@ -364,11 +340,7 @@ namespace Microsoft.Windows.Shell
 
         private void _OnPropertyChangedThatRequiresRepaint()
         {
-            var handler = PropertyChangedThatRequiresRepaint;
-            if (handler != null)
-            {
-                handler(this, EventArgs.Empty);
-            }
+            PropertyChangedThatRequiresRepaint?.Invoke(this, EventArgs.Empty);
         }
 
         internal event EventHandler PropertyChangedThatRequiresRepaint;

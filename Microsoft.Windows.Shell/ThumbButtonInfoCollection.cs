@@ -2,7 +2,7 @@
     Copyright Microsoft Corporation. All Rights Reserved.
 \**************************************************************************/
 
-namespace Microsoft.Windows.Shell
+namespace System.Windows.Shell
 {
     using System.Windows;
 

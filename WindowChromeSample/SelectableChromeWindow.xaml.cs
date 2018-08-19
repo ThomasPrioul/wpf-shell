@@ -6,7 +6,7 @@ namespace WindowChromeSample
 {
     using System.Windows;
     using System.Windows.Input;
-    using Microsoft.Windows.Shell;
+    using System.Windows.Shell;
 
     public partial class SelectableChromeWindow
     {

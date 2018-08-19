@@ -110,3 +110,4 @@ UpgradeLog*.XML
 .DS_Store
 
 *.swp
+/.vs/

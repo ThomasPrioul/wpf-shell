@@ -2,7 +2,7 @@
     Copyright Microsoft Corporation. All Rights Reserved.
 \**************************************************************************/
 
-namespace Microsoft.Windows.Shell
+namespace System.Windows.Shell
 {
     // CONSIDER:
     // The V4 implementation of this includes logic to handle hangs and crashes in Explorer.

@@ -1,0 +1,38 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+	<TargetFrameworks>net40;net45;net35</TargetFrameworks>
+	<Version>3.0.3</Version>
+	<Description>Windows 7 shell integration library for WPF.</Description>
+	<Company>Microsoft;SNCF</Company>
+	<Authors>Microsoft;Thomas Prioul</Authors>
+	<Copyright>Copyright © Microsoft 2010</Copyright>
+	<Guid>573618e1-4f3f-4395-a3bf-ffebfb342917</Guid>
+	<CLSCompliant>true</CLSCompliant>
+	<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+  </PropertyGroup>
+  
+  <ItemGroup Condition="'$(TargetFramework)'!='net35'">
+    <Compile Remove="JumpItem.cs" />
+	  <Compile Remove="JumpList.cs" />
+	  <Compile Remove="JumpPath.cs" />
+	  <Compile Remove="JumpTask.cs" />
+	  <Compile Remove="TaskBarItemInfo.cs" />
+	  <Compile Remove="ThumbButtonInfo.cs" />
+	  <Compile Remove="ThumbButtonInfoCollection.cs" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)'=='net45'">
+    <Compile Remove="**\*.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SystemCommands.cs"/>
+    <Compile Include="SystemParameters2.cs"/>
+  </ItemGroup>
+  
+  <ItemGroup>
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="System" />
+    <Reference Include="System.Xaml" Condition="'$(TargetFramework)'!='net35'" />
+    <Reference Include="WindowsBase" />
+  </ItemGroup>
+</Project>
